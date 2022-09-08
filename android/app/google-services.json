@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "1063685137532",
+    "project_id": "baby-journal-29fc3",
+    "storage_bucket": "baby-journal-29fc3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063685137532:android:532e7237825e6ff90515f9",
+        "android_client_info": {
+          "package_name": "com.example.baby_journal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063685137532-53grjpuqorfmk7i7bbh8i5eb6a6e9fnv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.baby_journal",
+            "certificate_hash": "6c25c2949cec957b8b7af70356d13bee259bf600"
+          }
+        },
+        {
+          "client_id": "1063685137532-t5dheea1jdafpiunra89ov1sfj5732di.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9pnpzwiqk7SDDJEsNqd4iaCt76MVWTW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063685137532-t5dheea1jdafpiunra89ov1sfj5732di.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1063685137532-lbi46561qt0vngesjres5jcvpf6514av.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.babyJournal"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063685137532:android:afd9258b21b2aa540515f9",
+        "android_client_info": {
+          "package_name": "de.develappers.hourglassTimer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063685137532-t5dheea1jdafpiunra89ov1sfj5732di.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9pnpzwiqk7SDDJEsNqd4iaCt76MVWTW0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063685137532-t5dheea1jdafpiunra89ov1sfj5732di.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1063685137532-lbi46561qt0vngesjres5jcvpf6514av.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.babyJournal"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
