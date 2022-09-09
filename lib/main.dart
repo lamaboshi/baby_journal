@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 
-import 'helpers/constants.dart';
 import 'helpers/locator.dart';
 import 'routes/app_routes.dart';
 
@@ -18,14 +17,13 @@ class TimeTrackingApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       theme: ThemeData.from(
-        colorScheme: ColorScheme.light(
-          primary: appColors[0],
-          secondary: appColors[2],
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.orange,
         ),
         useMaterial3: true,
       ),
       routeInformationParser: const QRouteInformationParser(),
-      routerDelegate: QRouterDelegate(AppRoutes().routes),
+      routerDelegate: QRouterDelegate(AppRoutes().routes, initPath: '/home'),
     );
   }
 }

@@ -20,6 +20,6 @@ class LoginController extends BaseController {
       // Once signed in, return the UserCredential
       await FirebaseAuth.instance.signInWithCredential(credential);
     }
-    await QR.to('/');
+    await QR.to('/home');
   }
 }
