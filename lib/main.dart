@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:overlayment/overlayment.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 
 import 'helpers/locator.dart';
@@ -15,15 +16,18 @@ class TimeTrackingApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final router = QRouterDelegate(AppRoutes().routes, initPath: '/home');
+    Overlayment.navigationKey = router.key;
     return MaterialApp.router(
       theme: ThemeData.from(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.orange,
+          brightness: Brightness.dark,
         ),
         useMaterial3: true,
       ),
       routeInformationParser: const QRouteInformationParser(),
-      routerDelegate: QRouterDelegate(AppRoutes().routes, initPath: '/home'),
+      routerDelegate: router,
     );
   }
 }

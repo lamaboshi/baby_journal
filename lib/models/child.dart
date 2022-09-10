@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:flutter/foundation.dart';
 
 class Child {
   final String id;
@@ -23,16 +23,30 @@ class Child {
     return result;
   }
 
-  factory Child.fromMap(Map<String, dynamic> map) {
+  factory Child.fromMap(Map<String, dynamic> map, String id) {
     return Child(
-      id: map['id'] ?? '',
+      id: id,
       name: map['name'] ?? '',
-      birthday: DateTime.fromMillisecondsSinceEpoch(map['birthday']),
-      parents: List<String>.from(map['parents']),
+      birthday: DateTime.parse(map['birthday']),
+      parents: map['parents'] == null
+          ? <String>[]
+          : List<String>.from(map['parents']),
     );
   }
 
-  String toJson() => json.encode(toMap());
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
 
-  factory Child.fromJson(String source) => Child.fromMap(json.decode(source));
+    return other is Child &&
+        other.id == id &&
+        other.name == name &&
+        other.birthday == birthday &&
+        listEquals(other.parents, parents);
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^ name.hashCode ^ birthday.hashCode ^ parents.hashCode;
+  }
 }

@@ -1,6 +1,8 @@
+import 'package:baby_journal/pages/home/controller.dart';
 import 'package:baby_journal/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:qlevar_router/qlevar_router.dart';
+import 'package:reactable/reactable.dart';
 
 class HomeView extends StatefulWidget {
   final QRouter router;
@@ -30,6 +32,19 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 2,
+        title: Scope(
+          builder: (_) {
+            final controller = HomeController.instance;
+            return Text(
+              controller.child.value == null
+                  ? 'Select a child'
+                  : controller.child.value!.name,
+            );
+          },
+        ),
+      ),
       body: Center(child: widget.router),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},

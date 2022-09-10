@@ -1,3 +1,4 @@
+import 'package:baby_journal/pages/home/controller.dart';
 import 'package:baby_journal/pages/home/settings/controller.dart';
 import 'package:baby_journal/pages/home/settings/view.dart';
 import 'package:baby_journal/pages/home/timeline/view.dart';
@@ -30,7 +31,7 @@ class AppRoutes {
       name: home,
       middleware: [
         AuthMiddleware(),
-        //ControllerMid(() => HomeController()),
+        ControllerMid(() => HomeController()),
       ],
       builderChild: (r) => HomeView(r),
       initRoute: '/memories',
