@@ -4,6 +4,8 @@ import 'package:baby_journal/pages/home/settings/view.dart';
 import 'package:baby_journal/pages/home/timeline/view.dart';
 import 'package:baby_journal/pages/home/view.dart';
 import 'package:baby_journal/pages/login/view.dart';
+import 'package:baby_journal/pages/memory/add/controller.dart';
+import 'package:baby_journal/pages/memory/add/view.dart';
 import 'package:baby_journal/routes/middlewares/auth_middleware.dart';
 import 'package:baby_journal/routes/middlewares/controller_middleware.dart';
 import 'package:flutter/material.dart';
@@ -61,5 +63,13 @@ class AppRoutes {
         ),
       ],
     ),
+    QRoute(
+      path: '/memory/add',
+      middleware: [
+        AuthMiddleware(),
+        ControllerMid(() => AddMemoryController()),
+      ],
+      builder: () => const AddMemoryView(),
+    )
   ];
 }

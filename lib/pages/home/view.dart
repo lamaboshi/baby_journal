@@ -47,7 +47,7 @@ class _HomeViewState extends State<HomeView> {
       ),
       body: Center(child: widget.router),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: HomeController.instance.addMemory,
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -90,7 +90,7 @@ class _IconItem extends StatelessWidget {
     return IconButton(
       icon: Icon(
         icon,
-        color: Colors.orange,
+        color: Colors.white,
       ),
       onPressed: () => _goTo(index),
     );

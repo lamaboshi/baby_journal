@@ -1,3 +1,4 @@
+import 'package:baby_journal/services/storage_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -8,6 +9,9 @@ final locator = GetIt.instance;
 Future<void> registerInstances() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  final storage = StorageService();
+  await storage.init();
+  locator.registerSingleton(storage);
 }
 
 /// The base controller definitions

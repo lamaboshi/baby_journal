@@ -15,7 +15,7 @@ class SettingsView extends StatelessWidget {
         children: const [
           _ChildrenWidget(),
           Divider(),
-          _ParentsWidget(),
+          _FamilyWidget(),
           Divider(),
           _ChildInfoWidget(),
           Divider(),
@@ -78,13 +78,13 @@ class _ChildItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => HomeController.instance.child.value = child,
+      onTap: () => SettingsController.instance.setChild(child),
       child: Scope(
         builder: (_) => AnimatedContainer(
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInBack,
           color: HomeController.instance.child.value == child
-              ? Colors.amber
+              ? Colors.indigo.shade700
               : Colors.transparent,
           child: Row(
             children: [
@@ -106,8 +106,8 @@ class _ChildItemWidget extends StatelessWidget {
   }
 }
 
-class _ParentsWidget extends StatelessWidget {
-  const _ParentsWidget({
+class _FamilyWidget extends StatelessWidget {
+  const _FamilyWidget({
     Key? key,
   }) : super(key: key);
 
@@ -126,7 +126,7 @@ class _ParentsWidget extends StatelessWidget {
               children: [
                 const SizedBox(width: 8),
                 Text(
-                  'Parents',
+                  'Family',
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Spacer(),
@@ -142,9 +142,9 @@ class _ParentsWidget extends StatelessWidget {
                 builder: (_) => ListView.builder(
                   padding: EdgeInsets.zero,
                   shrinkWrap: true,
-                  itemCount: home.child.value!.parents.length,
+                  itemCount: home.child.value!.family.length,
                   itemBuilder: (context, index) => Text(
-                    home.child.value!.parents[index],
+                    home.child.value!.family[index],
                   ),
                 ),
               ),

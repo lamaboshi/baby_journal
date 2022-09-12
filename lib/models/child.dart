@@ -1,15 +1,16 @@
+import 'package:age_calculator/age_calculator.dart';
 import 'package:flutter/foundation.dart';
 
 class Child {
   final String id;
   final String name;
   final DateTime birthday;
-  final List<String> parents;
+  final List<String> family;
   Child({
     required this.id,
     required this.name,
     required this.birthday,
-    required this.parents,
+    required this.family,
   });
 
   Map<String, dynamic> toMap() {
@@ -18,7 +19,7 @@ class Child {
     result.addAll({'id': id});
     result.addAll({'name': name});
     result.addAll({'birthday': birthday.millisecondsSinceEpoch});
-    result.addAll({'parents': parents});
+    result.addAll({'family': family});
 
     return result;
   }
@@ -28,9 +29,8 @@ class Child {
       id: id,
       name: map['name'] ?? '',
       birthday: DateTime.parse(map['birthday']),
-      parents: map['parents'] == null
-          ? <String>[]
-          : List<String>.from(map['parents']),
+      family:
+          map['family'] == null ? <String>[] : List<String>.from(map['family']),
     );
   }
 
@@ -42,11 +42,16 @@ class Child {
         other.id == id &&
         other.name == name &&
         other.birthday == birthday &&
-        listEquals(other.parents, parents);
+        listEquals(other.family, family);
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ name.hashCode ^ birthday.hashCode ^ parents.hashCode;
+    return id.hashCode ^ name.hashCode ^ birthday.hashCode ^ family.hashCode;
+  }
+
+  String age({DateTime? today}) {
+    final value = AgeCalculator.age(birthday, today: today);
+    return '${value.years}Y ${value.months}M ${value.days}D';
   }
 }

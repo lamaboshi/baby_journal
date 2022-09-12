@@ -1,6 +1,7 @@
 import 'package:baby_journal/helpers/locator.dart';
 import 'package:baby_journal/models/child.dart';
 import 'package:baby_journal/pages/home/controller.dart';
+import 'package:baby_journal/services/storage_service.dart';
 import 'package:baby_journal/widgets/inputs_panel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,7 +48,7 @@ class SettingsController extends BaseController {
         final dbChildren = info['children'] as List<dynamic>;
         for (var child in dbChildren) {
           await store.doc(child).update({
-            'parents': FieldValue.arrayUnion([user.displayName])
+            'family': FieldValue.arrayUnion([user.displayName])
           });
         }
       }
@@ -84,7 +85,7 @@ class SettingsController extends BaseController {
     final ref = await FirebaseFirestore.instance.collection('children').add({
       'name': name,
       'birthday': birthday,
-      'parents': [
+      'family': [
         user.displayName,
       ]
     });
@@ -104,8 +105,8 @@ class SettingsController extends BaseController {
       'children': FieldValue.arrayRemove([child.id])
     });
     final dbChild = await store.doc(userPath).get();
-    final parents = dbChild.data()!['children'] as List<dynamic>;
-    if (parents.isEmpty) await store.doc(child.id).delete();
+    final family = dbChild.data()!['children'] as List<dynamic>;
+    if (family.isEmpty) await store.doc(child.id).delete();
   }
 
   Future addParent() async {
@@ -132,5 +133,10 @@ class SettingsController extends BaseController {
       });
       parentPath = ref.path;
     }
+  }
+
+  void setChild(Child child) {
+    HomeController.instance.child.value = child;
+    locator<StorageService>().setString(StorageKeys.childPath, child.id);
   }
 }

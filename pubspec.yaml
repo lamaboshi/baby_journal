@@ -20,7 +20,10 @@ dependencies:
   cloud_firestore: ^3.4.7
   intl: ^0.17.0
   overlayment: ^0.1.1
-
+  shared_preferences: ^2.0.15
+  image_picker: ^0.8.5+3
+  age_calculator: ^1.0.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
