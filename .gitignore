@@ -1,3 +1,4 @@
 Backend/BabyJournal/bin
 Backend/BabyJournal/obj
 Backend/BabyJournal/appsettings.Development.json
+frontend/lib/firebase_options.dart
