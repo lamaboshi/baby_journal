@@ -23,6 +23,7 @@ dependencies:
   shared_preferences: ^2.0.15
   image_picker: ^0.8.5+3
   age_calculator: ^1.0.0
+  uuid: ^3.0.6
   
 dev_dependencies:
   flutter_test:

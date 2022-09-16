@@ -21,8 +21,7 @@ class TimeTrackingApp extends StatelessWidget {
     return MaterialApp.router(
       theme: ThemeData.from(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigo,
-          brightness: Brightness.dark,
+          seedColor: Colors.lightGreen,
         ),
         useMaterial3: true,
       ),

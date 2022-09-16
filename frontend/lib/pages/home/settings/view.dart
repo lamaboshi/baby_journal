@@ -84,7 +84,7 @@ class _ChildItemWidget extends StatelessWidget {
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInBack,
           color: HomeController.instance.child.value == child
-              ? Colors.indigo.shade700
+              ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
               : Colors.transparent,
           child: Row(
             children: [
@@ -95,7 +95,7 @@ class _ChildItemWidget extends StatelessWidget {
                 onPressed: () => SettingsController.instance.delete(child),
                 icon: const Icon(
                   Icons.delete,
-                  color: Colors.red,
+                  color: Colors.white,
                 ),
               )
             ],

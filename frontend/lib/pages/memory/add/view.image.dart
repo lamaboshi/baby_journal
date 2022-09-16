@@ -7,10 +7,11 @@ class _ImageSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = AddMemoryController.instance;
     return Container(
+      height: MediaQuery.of(context).size.height * 0.3,
       margin: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Colors.white10,
+        color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
       ),
       child: Scope(builder: (_) {
         return controller.image.value == null

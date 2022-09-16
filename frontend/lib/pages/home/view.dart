@@ -90,7 +90,7 @@ class _IconItem extends StatelessWidget {
     return IconButton(
       icon: Icon(
         icon,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.primary,
       ),
       onPressed: () => _goTo(index),
     );
