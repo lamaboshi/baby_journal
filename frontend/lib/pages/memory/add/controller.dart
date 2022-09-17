@@ -30,7 +30,8 @@ class AddMemoryController extends BaseController {
 
   @override
   Future<void> onInit() async {
-    final path = locator<StorageService>().getString(StorageKeys.childPath)!;
+    final path =
+        locator<StorageService>().getString(StorageKeys.selectedChild)!;
     final dbChild = await FirebaseFirestore.instance.doc(path).get();
     child = Child.fromMap(dbChild.data()!, path);
   }

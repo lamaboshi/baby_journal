@@ -54,7 +54,7 @@ public class AuthController : ControllerBase
         }
         var model = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToUpper() == user.Email.ToUpper() && u.Password == user.Password);
         if (model == null) return BadRequest("Unknown user");
-
+        model.LastLogin = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
         return Ok(new LoginModel

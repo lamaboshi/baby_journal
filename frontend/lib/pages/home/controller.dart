@@ -1,6 +1,5 @@
 import 'package:baby_journal/helpers/locator.dart';
 import 'package:baby_journal/models/child.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:overlayment/overlayment.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 import 'package:reactable/reactable.dart';
@@ -13,11 +12,7 @@ class HomeController extends BaseController {
 
   @override
   Future<void> onInit() async {
-    final path = locator<StorageService>().getString(StorageKeys.childPath);
-    if (path != null) {
-      final dbChild = await FirebaseFirestore.instance.doc(path).get();
-      child.value = Child.fromMap(dbChild.data()!, path);
-    }
+    final path = locator<StorageService>().getString(StorageKeys.selectedChild);
   }
 
   void addMemory() {

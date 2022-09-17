@@ -30,6 +30,12 @@
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"
+        },
+        {
+            "name": "Flutter",
+            "type": "dart",
+            "request": "launch",
+            "program": "frontend/lib/main.dart"
         }
     ]
 }

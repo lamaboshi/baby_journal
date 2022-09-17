@@ -3,6 +3,7 @@ import 'package:baby_journal/pages/home/settings/controller.dart';
 import 'package:baby_journal/pages/home/settings/view.dart';
 import 'package:baby_journal/pages/home/timeline/view.dart';
 import 'package:baby_journal/pages/home/view.dart';
+import 'package:baby_journal/pages/login/controller.dart';
 import 'package:baby_journal/pages/login/view.dart';
 import 'package:baby_journal/pages/memory/add/controller.dart';
 import 'package:baby_journal/pages/memory/add/view.dart';
@@ -26,6 +27,11 @@ class AppRoutes {
     QRoute(
       path: '/login',
       name: login,
+      middleware: [
+        ControllerMid(
+          () => LoginController(),
+        )
+      ],
       builder: () => const LoginView(),
     ),
     QRoute.withChild(

@@ -28,9 +28,7 @@ class AuthService {
   Future<String?> login(User user) async {
     final dio = locator<Dio>();
     try {
-      final result = await dio.post(
-        '/auth/log-in',
-      );
+      final result = await dio.post('/auth/log-in', data: user.toMap());
 
       if (result.statusCode != 200) {
         return result.data.toString();
@@ -40,9 +38,7 @@ class AuthService {
       locator<StorageService>().setString(StorageKeys.userData,
           this.user!.copyWith(password: user.password).toJson());
     } on DioError catch (e) {
-      return e.response != null
-          ? e.response!.statusMessage
-          : e.error.toString();
+      return e.response?.data != null ? e.response!.data : e.error.toString();
     } catch (e) {
       return e.toString();
     }
@@ -64,12 +60,12 @@ class AuthService {
 
       this.user = User.fromMap(result.data as Map<String, dynamic>);
 
-      locator<StorageService>().setString(StorageKeys.userData,
-          this.user!.copyWith(password: user.password).toJson());
+      locator<StorageService>().setString(
+        StorageKeys.userData,
+        this.user!.copyWith(password: user.password).toJson(),
+      );
     } on DioError catch (e) {
-      return e.response != null
-          ? e.response!.statusMessage
-          : e.error.toString();
+      return e.response?.data != null ? e.response!.data : e.error.toString();
     } catch (e) {
       return e.toString();
     }

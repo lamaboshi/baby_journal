@@ -137,6 +137,6 @@ class SettingsController extends BaseController {
 
   void setChild(Child child) {
     HomeController.instance.child.value = child;
-    locator<StorageService>().setString(StorageKeys.childPath, child.id);
+    locator<StorageService>().setString(StorageKeys.selectedChild, child.id);
   }
 }
