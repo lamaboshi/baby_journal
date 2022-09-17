@@ -1,5 +1,6 @@
 using System.Text;
 using BabyJournal.Database;
+using BabyJournal.Services.Sftp;
 using ChatBackend.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ builder
     .Services
     .AddHttpContextAccessor()
     .AddScoped<IAuthorizationHandler, AuthHandler>()
+    .AddSingleton<ISftpService, SftpService>()
     .AddAutoMapper(typeof(AppDbContext).Assembly)
     .AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>())
     .AddAuthorization(config =>
