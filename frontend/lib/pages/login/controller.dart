@@ -1,25 +1,39 @@
 import 'package:baby_journal/helpers/locator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:qlevar_router/qlevar_router.dart';
+import 'package:baby_journal/models/user.dart';
+import 'package:flutter/material.dart';
+import 'package:reactable/reactable.dart';
+
+import '../../services/auth_service.dart';
 
 class LoginController extends BaseController {
-  Future<void> login() async {
-    final googleUser = await GoogleSignIn().signIn();
+  String email = '';
+  final formKey = GlobalKey<FormState>();
+  final isSignUp = Reactable(false);
+  String password = '';
+  String userName = '';
 
-    // Obtain the auth details from the request
-    final googleAuth = await googleUser?.authentication;
+  final _authService = locator<AuthService>();
 
-    if (googleAuth != null) {
-      // Create a new credential
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+  static LoginController get instance => locator<LoginController>();
 
-      // Once signed in, return the UserCredential
-      await FirebaseAuth.instance.signInWithCredential(credential);
+  Future login() async {
+    if (!formKey.currentState!.validate()) {
+      return;
     }
-    await QR.navigator.replaceAll('/home');
+    final user = User(
+      name: userName,
+      email: email,
+      password: password,
+      token: 'token',
+    );
+    final error = isSignUp.value
+        ? await _authService.signUp(user)
+        : await _authService.login(user);
+    if (error == null) {
+      return;
+    }
+    ScaffoldMessenger.of(formKey.currentContext!).showSnackBar(SnackBar(
+      content: Text(error),
+    ));
   }
 }

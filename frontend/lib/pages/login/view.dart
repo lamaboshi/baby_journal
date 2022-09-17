@@ -1,6 +1,9 @@
 import 'package:baby_journal/pages/login/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:reactable/reactable.dart';
+
+part 'view.form.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -23,15 +26,25 @@ class LoginView extends StatelessWidget {
               ),
             ),
             Expanded(flex: 4, child: Lottie.asset('assets/baby-loading.json')),
+            const _LoginForm(),
             ElevatedButton(
               onPressed: controller.login,
               child: Container(
-                color: Colors.red,
+                color: Colors.lightGreen,
                 width: double.infinity,
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(8),
-                child: const Text('Sign in with Google', style: style),
+                child: Scope(
+                  builder: (_) => Text(
+                      controller.isSignUp.value ? 'Sign in' : 'Log in',
+                      style: style),
+                ),
               ),
+            ),
+            Scope(
+              builder: (_) => Checkbox(
+                  value: controller.isSignUp.value,
+                  onChanged: (v) => controller.isSignUp.value = v ?? false),
             ),
             const SizedBox(height: 8),
           ],

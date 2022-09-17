@@ -57,7 +57,12 @@ public class AuthController : ControllerBase
 
         await _context.SaveChangesAsync();
 
-        return Ok(CreateToken(model));
+        return Ok(new LoginModel
+        {
+            Name = user.Name,
+            Email = user.Email,
+            Token = CreateToken(model),
+        });
     }
 
     [HttpGet("log-out")]
@@ -107,5 +112,6 @@ public class LoginModel
     public string Email { get; set; }
     public string Name { get; set; }
     public string Password { get; set; }
+    public string Token { get; set; }
 
 }

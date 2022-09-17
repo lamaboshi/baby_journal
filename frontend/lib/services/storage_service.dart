@@ -23,4 +23,5 @@ class StorageService {
 /// The keys to use with the local storage
 enum StorageKeys {
   childPath,
+  userData,
 }
