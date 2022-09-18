@@ -19,9 +19,10 @@ class TimeTrackingApp extends StatelessWidget {
     final router = QRouterDelegate(AppRoutes().routes, initPath: '/home');
     Overlayment.navigationKey = router.key;
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.from(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.lightGreen,
+          seedColor: Colors.orange,
         ),
         useMaterial3: true,
       ),

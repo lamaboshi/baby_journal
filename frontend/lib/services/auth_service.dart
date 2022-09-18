@@ -11,15 +11,12 @@ class AuthService {
 
   bool get isAuth => user != null;
 
-  /// when creating the service check if there is any login data in the local
-  /// storage, if any found get them and set the user as logged in.
-  AuthService() {
+  Future<void> init() async {
     final data = locator<StorageService>().getString(StorageKeys.userData);
     if (data == null || data.isEmpty) {
       return;
     }
-    user = User.fromJson(data);
-    login(user!);
+    await login(User.fromJson(data));
   }
 
   /// Send the login request and save the data in the local storage and

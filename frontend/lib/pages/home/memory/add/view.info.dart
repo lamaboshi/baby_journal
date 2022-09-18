@@ -22,7 +22,7 @@ class _AgeSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = AddMemoryController.instance;
+    final controller = MemoryDetailsController.instance;
     final formatter = DateFormat.yMMMd();
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -52,7 +52,7 @@ class _BodySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = AddMemoryController.instance;
+    final controller = MemoryDetailsController.instance;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
@@ -95,7 +95,7 @@ class _TextSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = AddMemoryController.instance;
+    final controller = MemoryDetailsController.instance;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(

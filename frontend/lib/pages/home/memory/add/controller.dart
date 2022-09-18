@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:baby_journal/helpers/locator.dart';
 import 'package:baby_journal/models/memory.dart';
-import 'package:baby_journal/pages/memory/add/memory_saved_widget.dart';
 import 'package:baby_journal/services/storage_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,10 +13,12 @@ import 'package:qlevar_router/qlevar_router.dart';
 import 'package:reactable/reactable.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../models/child.dart';
+import '../../../../models/child.dart';
+import 'memory_saved_widget.dart';
 
-class AddMemoryController extends BaseController {
-  static AddMemoryController get instance => locator<AddMemoryController>();
+class MemoryDetailsController extends BaseController {
+  static MemoryDetailsController get instance =>
+      locator<MemoryDetailsController>();
   late final Child child;
 
   final image = Reactable<XFile?>(null);

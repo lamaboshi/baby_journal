@@ -12,10 +12,12 @@ Future<void> registerInstances() async {
   final storage = StorageService();
   await storage.init();
   locator.registerSingleton(storage);
-  locator.registerSingleton(AuthService());
   locator.registerSingleton(Dio(BaseOptions(
     baseUrl: 'https://localhost:7034/api/',
   )));
+  final auth = AuthService();
+  await auth.init();
+  locator.registerSingleton(auth);
 }
 
 /// The base controller definitions

@@ -20,17 +20,17 @@ class SettingsController extends BaseController {
 
   @override
   Future<void> onInit() async {
-    userPath = await _getUser();
+    // userPath = await _getUser();
 
-    store.doc(userPath).snapshots().listen((event) async {
-      final childrenRefs =
-          (event.data()!['children'] as List<dynamic>?) ?? <dynamic>[];
-      children.clear();
-      for (var c in childrenRefs) {
-        final child = await FirebaseFirestore.instance.doc(c).get();
-        children.add(Child.fromMap(child.data()!, c.toString()));
-      }
-    });
+    // store.doc(userPath).snapshots().listen((event) async {
+    //   final childrenRefs =
+    //       (event.data()!['children'] as List<dynamic>?) ?? <dynamic>[];
+    //   children.clear();
+    //   for (var c in childrenRefs) {
+    //     final child = await FirebaseFirestore.instance.doc(c).get();
+    //     children.add(Child.fromMap(child.data()!, c.toString()));
+    //   }
+    // });
   }
 
   Future<String> _getUser() async {

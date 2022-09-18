@@ -13,6 +13,10 @@ class HomeController extends BaseController {
   @override
   Future<void> onInit() async {
     final path = locator<StorageService>().getString(StorageKeys.selectedChild);
+    if (path == null) {
+      QR.to('/home/settings');
+      return;
+    }
   }
 
   void addMemory() {

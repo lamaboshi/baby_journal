@@ -76,8 +76,6 @@ public class AuthController : ControllerBase
         var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToUpper() == email.ToUpper());
         if (user == null) return NotFound();
 
-        await _context.SaveChangesAsync();
-
         return NoContent();
     }
 

@@ -5,7 +5,7 @@ class _ImageSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = AddMemoryController.instance;
+    final controller = MemoryDetailsController.instance;
     return Container(
       height: MediaQuery.of(context).size.height * 0.3,
       margin: const EdgeInsets.all(4),
@@ -27,7 +27,7 @@ class _PickImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = AddMemoryController.instance;
+    final controller = MemoryDetailsController.instance;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [

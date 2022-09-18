@@ -9,17 +9,20 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: const [
-          _ChildrenWidget(),
-          Divider(),
-          _FamilyWidget(),
-          Divider(),
-          _ChildInfoWidget(),
-          Divider(),
-        ],
+    return Scaffold(
+      appBar: AppBar(title: const Text('Settings')),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: const [
+            _ChildrenWidget(),
+            // Divider(),
+            // _FamilyWidget(),
+            // Divider(),
+            // _ChildInfoWidget(),
+            // Divider(),
+          ],
+        ),
       ),
     );
   }
@@ -33,36 +36,38 @@ class _ChildrenWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = SettingsController.instance;
-    return Column(
-      children: [
-        Row(
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
           children: [
-            const SizedBox(width: 8),
-            Text(
-              'Children',
-              style: Theme.of(context).textTheme.titleLarge,
+            Row(
+              children: [
+                const SizedBox(width: 8),
+                Text(
+                  'Children',
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: controller.addChild,
+                  icon: const Icon(Icons.add),
+                )
+              ],
             ),
-            const Spacer(),
-            IconButton(
-              onPressed: controller.addChild,
-              icon: const Icon(Icons.add),
-            )
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Scope(
-            builder: (_) => ListView.builder(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              itemCount: controller.children.length,
-              itemBuilder: (context, index) => _ChildItemWidget(
-                child: controller.children[index],
+            Scope(
+              builder: (_) => ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: controller.children.length,
+                itemBuilder: (context, index) => _ChildItemWidget(
+                  child: controller.children[index],
+                ),
               ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

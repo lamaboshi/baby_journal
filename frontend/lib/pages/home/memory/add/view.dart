@@ -1,17 +1,18 @@
 import 'dart:io';
 
-import 'package:baby_journal/pages/memory/add/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 import 'package:reactable/reactable.dart';
 
+import 'controller.dart';
+
 part 'view.image.dart';
 part 'view.info.dart';
 
-class AddMemoryView extends StatelessWidget {
-  const AddMemoryView({super.key});
+class MemoryDetailsView extends StatelessWidget {
+  const MemoryDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +54,12 @@ class _ActionsSection extends StatelessWidget {
         Expanded(
           flex: 3,
           child: ElevatedButton(
-            onPressed: AddMemoryController.instance.save,
+            onPressed: MemoryDetailsController.instance.save,
             child: Scope(
-              builder: (context) => AddMemoryController.instance.isWorking.value
-                  ? const CircularProgressIndicator()
-                  : const Text('Add'),
+              builder: (context) =>
+                  MemoryDetailsController.instance.isWorking.value
+                      ? const CircularProgressIndicator()
+                      : const Text('Add'),
             ),
           ),
         ),
