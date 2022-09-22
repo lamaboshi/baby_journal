@@ -11,7 +11,6 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = LoginController.instance;
-    const style = TextStyle(color: Colors.white, fontSize: 18);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -22,25 +21,22 @@ class LoginView extends StatelessWidget {
               const Text(
                 'Baby Journal',
                 style: TextStyle(
-                  color: Color(0xff000077),
+                  color: Color(0xff786757),
                   fontSize: 32,
                 ),
               ),
-              Lottie.asset('assets/baby-loading.json'),
+              Lottie.asset('assets/baby-login.json'),
               const _LoginForm(),
               const SizedBox(height: 16),
               ElevatedButton(
-                style: const ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.lightGreen),
-                ),
                 onPressed: controller.login,
                 child: SizedBox(
                   width: double.infinity,
                   child: Center(
                     child: Scope(
                       builder: (_) => Text(
-                          controller.isSignUp.value ? 'Sign Up' : 'Log in',
-                          style: style),
+                        controller.isSignUp.value ? 'Sign Up' : 'Log in',
+                      ),
                     ),
                   ),
                 ),

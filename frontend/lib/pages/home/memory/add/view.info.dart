@@ -66,6 +66,7 @@ class _BodySection extends StatelessWidget {
               ),
               keyboardType: TextInputType.number,
               onChanged: (value) {
+                if (value.isEmpty) return;
                 controller.weight.value = double.parse(value);
               },
             ),
@@ -80,6 +81,7 @@ class _BodySection extends StatelessWidget {
               ),
               keyboardType: TextInputType.number,
               onChanged: (value) {
+                if (value.isEmpty) return;
                 controller.length.value = double.parse(value);
               },
             ),

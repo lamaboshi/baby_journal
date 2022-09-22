@@ -4,9 +4,9 @@ class Memory {
   Memory({
     required this.at,
     required this.createdAt,
-    required this.createdFrom,
     required this.image,
-    required this.child,
+    required this.childId,
+    required this.id,
     this.length,
     this.weight,
     this.title,
@@ -19,9 +19,9 @@ class Memory {
     return Memory(
       at: DateTime.fromMillisecondsSinceEpoch(map['at']),
       createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
-      createdFrom: map['createdFrom'] ?? '',
       image: map['image'] ?? '',
-      child: map['child'] ?? '',
+      childId: map['childId'].toInt(),
+      id: map['id'].toInt(),
       length: map['length']?.toDouble(),
       weight: map['wight']?.toDouble(),
       title: map['title'],
@@ -31,9 +31,9 @@ class Memory {
 
   final DateTime at;
   final DateTime createdAt;
-  final String createdFrom;
   final String image;
-  final String child;
+  final int childId;
+  final int id;
   final double? length;
   final String? text;
   final String? title;
@@ -42,11 +42,9 @@ class Memory {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
-    result.addAll({'at': at.millisecondsSinceEpoch});
-    result.addAll({'createdAt': createdAt.millisecondsSinceEpoch});
-    result.addAll({'createdFrom': createdFrom});
+    result.addAll({'at': at.toUtc().toIso8601String()});
     result.addAll({'image': image});
-    result.addAll({'child': child});
+    result.addAll({'childId': childId});
     if (length != null) {
       result.addAll({'length': length});
     }

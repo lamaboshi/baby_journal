@@ -1,5 +1,6 @@
 import 'package:baby_journal/helpers/locator.dart';
 import 'package:baby_journal/models/child.dart';
+import 'package:baby_journal/pages/home/settings/service.dart';
 import 'package:overlayment/overlayment.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 import 'package:reactable/reactable.dart';
@@ -12,11 +13,12 @@ class HomeController extends BaseController {
 
   @override
   Future<void> onInit() async {
-    final path = locator<StorageService>().getString(StorageKeys.selectedChild);
-    if (path == null) {
+    final id = locator<StorageService>().getInt(StorageKeys.selectedChild);
+    if (id == null) {
       QR.to('/home/settings');
       return;
     }
+    child.value = await SettingsService().getChild(id);
   }
 
   void addMemory() {

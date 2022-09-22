@@ -24,7 +24,7 @@ public class ChildController : ControllerBase
         return Ok(children);
     }
 
-    [HttpGet("/:id")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
         var child = await _childService.GetChild(id);
@@ -45,15 +45,15 @@ public class ChildController : ControllerBase
         return Ok(child);
     }
 
-    [HttpDelete("/:id")]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
         await _childService.RemoveChild(id);
         return NoContent();
     }
 
-    [HttpPost("/parent")]
-    public async Task<IActionResult> AddParent(AddParentRequest request)
+    [HttpPost("parent")]
+    public async Task<IActionResult> AddParent([FromBody] AddParentRequest request)
     {
         try
         {
@@ -66,19 +66,25 @@ public class ChildController : ControllerBase
         }
     }
 
-    [HttpDelete("/parent")]
-    public async Task<IActionResult> DeleteParent(RemoveParentRequest request)
+    [HttpDelete("parent")]
+    public async Task<IActionResult> DeleteParent([FromBody] RemoveParentRequest request)
     {
         var child = await _childService.RemoveParent(request);
         return Ok(child);
     }
 
-    [HttpGet("/:chidId/memory")]
-    public async Task<IActionResult> GetAllMemories(int chidId)
+    [HttpGet("{chidId}/memory")]
+    public async Task<IActionResult> GetAllMemories(int chidId, [FromQuery] int Offset, [FromQuery] int limit = 25)
     {
-        var result = await _memoryService.GetMemories(chidId);
+        var result = await _memoryService.GetMemories(chidId, new PagedMemories { Limit = limit, Offset = Offset });
         return Ok(result);
     }
 
+    [HttpGet("{chidId}/memory/random")]
+    public async Task<IActionResult> GetRandomMemories(int chidId)
+    {
+        var result = await _memoryService.GetRandomMemories(chidId);
+        return Ok(result);
+    }
 }
 

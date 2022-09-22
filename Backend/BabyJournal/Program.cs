@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using BabyJournal.Database;
 using BabyJournal.Services;
 using BabyJournal.Services.Sftp;
@@ -11,13 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder
     .Services
     .AddHttpContextAccessor()
     .AddScoped<IAuthorizationHandler, AuthHandler>()
     .AddScoped<IChildService, ChildService>()
+    .AddScoped<IMemoryService, MemoryService>()
     .AddSingleton<ISftpService, SftpService>()
     .AddAutoMapper(typeof(AppDbContext).Assembly)
     .AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>())

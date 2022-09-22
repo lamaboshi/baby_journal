@@ -50,22 +50,26 @@ public class ChildService : IChildService
         };
         _context.Children.Add(child);
         await _context.SaveChangesAsync();
+        child.Parents = new List<UserModel>();
         return child;
     }
 
     public async Task<ChildModel> AddParent(AddParentRequest request)
     {
         var child = await _context.Children.Include(c => c.Parents).FirstAsync(c => c.Id == request.childId);
-        var parent = await _context.Users.FirstAsync(u => u.Email == request.ParentEmail);
-        throw new Exception("No user found with this email");
-        child.Parents.Remove(parent);
+        var parent = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToUpper() == request.ParentEmail.ToUpper());
+        if (parent == null)
+        {
+            throw new Exception("No user found with this email");
+        }
+        child.Parents.Add(parent);
         await _context.SaveChangesAsync();
         return child;
     }
 
     public async Task<ChildModel> EditChild(EditChildRequest request)
     {
-        var child = await _context.Children.FirstAsync(c => c.Id == request.Id);
+        var child = await _context.Children.Include(c => c.Parents).FirstAsync(c => c.Id == request.Id);
         child.Name = request.Name;
         child.Birthday = request.Birthday;
         child.UpdatedAt = DateTime.UtcNow;

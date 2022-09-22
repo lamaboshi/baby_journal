@@ -6,7 +6,6 @@ import 'helpers/locator.dart';
 import 'routes/app_routes.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   await registerInstances();
   runApp(const TimeTrackingApp());
 }
@@ -22,7 +21,7 @@ class TimeTrackingApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData.from(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.orange,
+          seedColor: Colors.orangeAccent,
         ),
         useMaterial3: true,
       ),

@@ -1,7 +1,10 @@
+import 'package:baby_journal/helpers/locator.dart';
 import 'package:baby_journal/models/child.dart';
 import 'package:baby_journal/pages/home/controller.dart';
 import 'package:baby_journal/pages/home/settings/controller.dart';
+import 'package:baby_journal/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:qlevar_router/qlevar_router.dart';
 import 'package:reactable/reactable.dart';
 
 class SettingsView extends StatelessWidget {
@@ -10,18 +13,28 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+        title: const Text('Settings'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              locator<AuthService>().logout();
+              QR.navigator.replaceAll('/login');
+            },
+            icon: const Icon(Icons.logout),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: const [
-            _ChildrenWidget(),
-            // Divider(),
-            // _FamilyWidget(),
-            // Divider(),
-            // _ChildInfoWidget(),
-            // Divider(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              _ChildrenWidget(),
+              _ChildSectionWidget(),
+            ],
+          ),
         ),
       ),
     );
@@ -46,7 +59,7 @@ class _ChildrenWidget extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   'Children',
-                  style: Theme.of(context).textTheme.titleMedium,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
                 const Spacer(),
                 IconButton(
@@ -85,12 +98,13 @@ class _ChildItemWidget extends StatelessWidget {
     return InkWell(
       onTap: () => SettingsController.instance.setChild(child),
       child: Scope(
-        builder: (_) => AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInBack,
-          color: HomeController.instance.child.value == child
-              ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
-              : Colors.transparent,
+        builder: (_) => Container(
+          decoration: BoxDecoration(
+            color: HomeController.instance.child.value?.id == child.id
+                ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: Row(
             children: [
               const SizedBox(width: 8),
@@ -98,13 +112,29 @@ class _ChildItemWidget extends StatelessWidget {
               const Spacer(),
               IconButton(
                 onPressed: () => SettingsController.instance.delete(child),
-                icon: const Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
+                icon: const Icon(Icons.delete),
               )
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ChildSectionWidget extends StatelessWidget {
+  const _ChildSectionWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: const [
+            _FamilyWidget(),
+            _ChildInfoWidget(),
+          ],
         ),
       ),
     );
@@ -129,7 +159,6 @@ class _FamilyWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                const SizedBox(width: 8),
                 Text(
                   'Family',
                   style: Theme.of(context).textTheme.titleLarge,
@@ -141,16 +170,22 @@ class _FamilyWidget extends StatelessWidget {
                 )
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Scope(
-                builder: (_) => ListView.builder(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  itemCount: home.child.value!.family.length,
-                  itemBuilder: (context, index) => Text(
-                    home.child.value!.family[index],
-                  ),
+            Scope(
+              builder: (_) => ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: home.child.value!.family.length,
+                itemBuilder: (context, index) => Row(
+                  children: [
+                    const SizedBox(width: 8),
+                    Text(home.child.value!.family[index].name),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () => SettingsController.instance
+                          .removeParent(home.child.value!.family[index]),
+                      icon: const Icon(Icons.delete),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -198,12 +233,14 @@ class _ChildEditInfoWidgetState extends State<_ChildEditInfoWidget> {
     final con = HomeController.instance;
     nameController.text = con.child.value!.name;
     birthdayController.text =
-        con.child.value!.birthday.toString().substring(0, 10);
+        con.child.value!.birthday.toLocal().toString().substring(0, 10);
   }
 
   @override
   void dispose() {
-    HomeController.instance.child.removeListener(update);
+    if (locator.isRegistered<HomeController>()) {
+      HomeController.instance.child.removeListener(update);
+    }
     nameController.dispose();
     birthdayController.dispose();
     super.dispose();
@@ -211,28 +248,28 @@ class _ChildEditInfoWidgetState extends State<_ChildEditInfoWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child:
-                Text('Details', style: Theme.of(context).textTheme.titleLarge),
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Child info',
+            style: Theme.of(context).textTheme.titleLarge,
           ),
-          TextField(controller: nameController),
-          TextField(controller: birthdayController),
-          Row(
-            children: [
-              const Spacer(),
-              TextButton(
-                onPressed: () {},
-                child: const Text('Save'),
-              )
-            ],
-          )
-        ],
-      ),
+        ),
+        TextField(controller: nameController),
+        TextField(controller: birthdayController),
+        Row(
+          children: [
+            const Spacer(),
+            TextButton(
+              onPressed: () => SettingsController.instance
+                  .update(nameController.text, birthdayController.text),
+              child: const Text('Save'),
+            )
+          ],
+        )
+      ],
     );
   }
 }

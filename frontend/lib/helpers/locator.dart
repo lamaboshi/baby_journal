@@ -1,20 +1,39 @@
+import 'dart:io';
+
 import 'package:baby_journal/services/auth_service.dart';
 import 'package:baby_journal/services/storage_service.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 final locator = GetIt.instance;
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 /// register the global service to the DI
 Future<void> registerInstances() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (kDebugMode) {
+    HttpOverrides.global = MyHttpOverrides();
+  }
   final storage = StorageService();
   await storage.init();
   locator.registerSingleton(storage);
-  locator.registerSingleton(Dio(BaseOptions(
-    baseUrl: 'https://localhost:7034/api/',
-  )));
+  final dio = Dio(BaseOptions(
+    baseUrl: 'https://127.0.0.1:7034/api/',
+    validateStatus: (s) => true,
+  ));
+  dio.interceptors.add(PrettyDioLogger());
+  locator.registerSingleton(dio);
   final auth = AuthService();
   await auth.init();
   locator.registerSingleton(auth);

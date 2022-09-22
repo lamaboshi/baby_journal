@@ -12,9 +12,11 @@ class StorageService {
   // set a value to the local storage
   void setString(StorageKeys key, String value) =>
       _instance!.setString(key.name, value);
+  void setInt(StorageKeys key, int value) => _instance!.setInt(key.name, value);
 
   // get a value from the local storage
   String? getString(StorageKeys key) => _instance!.getString(key.name);
+  int? getInt(StorageKeys key) => _instance!.getInt(key.name);
 
   // remove value from the local storage
   void remove(StorageKeys key) => _instance!.remove(key.name);

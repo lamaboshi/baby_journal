@@ -8,9 +8,19 @@ namespace BabyJournal.Services;
 public record AddMemoryRequest(int ChildId, string Image, DateTime At, string Title, string Text, double Weight, double length);
 public record EditMemoryRequest(int Id, DateTime At, string Title, string Text, double Weight, double length);
 
+public record PagedMemories
+{
+    public int Offset { get; set; }
+    public int Limit { get; set; }
+    public int Count { get; set; }
+
+    public List<MemoryModel> Records { get; set; }
+}
+
 public interface IMemoryService
 {
-    public Task<List<MemoryModel>> GetMemories(int childId);
+    public Task<PagedMemories> GetMemories(int childId, PagedMemories paged);
+    public Task<List<MemoryModel>> GetRandomMemories(int childId);
     public Task<MemoryModel> GetMemory(int id);
     public Task AddMemory(AddMemoryRequest request);
     public Task EditMemory(EditMemoryRequest request);
@@ -38,7 +48,7 @@ public class MemoryService : IMemoryService
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Child = child!,
-            CreatedBy = _httpContext.UserId(),
+            UserId = _httpContext.UserId(),
             Image = request.Image,
             Length = request.length,
             Text = request.Text,
@@ -60,9 +70,29 @@ public class MemoryService : IMemoryService
         memory.Weight = request.Weight;
         await _context.SaveChangesAsync();
     }
-    public async Task<List<MemoryModel>> GetMemories(int childId)
+
+    public async Task<PagedMemories> GetMemories(int childId, PagedMemories paged)
     {
-        throw new NotImplementedException();
+
+        var query = _context.Memories.Where(m => m.Child.Id == childId);
+        paged.Count = await query.CountAsync();
+        paged.Records = await query
+                            .OrderBy(m => m.At)
+                            .Skip(paged.Offset)
+                            .Take(paged.Limit)
+                            .ToListAsync();
+        return paged;
+    }
+
+
+    public Task<List<MemoryModel>> GetRandomMemories(int childId)
+    {
+        return _context
+            .Memories
+            .Where(m => m.Child.Id == childId)
+            .OrderBy(m => Guid.NewGuid())
+            .Take(10)
+            .ToListAsync();
     }
 
     public async Task<MemoryModel> GetMemory(int id)

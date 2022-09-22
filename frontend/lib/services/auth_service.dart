@@ -11,6 +11,10 @@ class AuthService {
 
   bool get isAuth => user != null;
 
+  Options get auth => Options(
+        headers: {'Authorization': 'Bearer ${user!.token}'},
+      );
+
   Future<void> init() async {
     final data = locator<StorageService>().getString(StorageKeys.userData);
     if (data == null || data.isEmpty) {

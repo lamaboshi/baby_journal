@@ -5,7 +5,7 @@ namespace BabyJournal.Database.Models;
 public class MemoryModel
 {
     public int Id { get; set; }
-    public int CreatedBy { get; set; }
+    public int UserId { get; set; }
     public double Length { get; set; }
     public double Weight { get; set; }
     public String Image { get; set; }
@@ -16,4 +16,5 @@ public class MemoryModel
     public DateTime UpdatedAt { get; set; }
 
     public ChildModel Child { get; set; }
+    public virtual UserModel User { get; set; }
 }

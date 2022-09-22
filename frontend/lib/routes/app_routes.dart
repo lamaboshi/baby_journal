@@ -1,5 +1,7 @@
 import 'package:baby_journal/pages/home/controller.dart';
+import 'package:baby_journal/pages/home/memory/service.dart';
 import 'package:baby_journal/pages/home/settings/controller.dart';
+import 'package:baby_journal/pages/home/settings/service.dart';
 import 'package:baby_journal/pages/home/settings/view.dart';
 import 'package:baby_journal/pages/home/view.dart';
 import 'package:baby_journal/pages/login/controller.dart';
@@ -44,6 +46,7 @@ class AppRoutes {
             QRoute(
               path: '/:id',
               middleware: [
+                ControllerMid(() => MemoriesService()),
                 ControllerMid(() => MemoryDetailsController()),
               ],
               builder: () => const MemoryDetailsView(),
@@ -53,6 +56,7 @@ class AppRoutes {
         QRoute(
           path: '/settings',
           middleware: [
+            ControllerMid(() => SettingsService()),
             ControllerMid(() => SettingsController()),
           ],
           builder: () => const SettingsView(),

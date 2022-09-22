@@ -1,11 +1,12 @@
 import 'package:age_calculator/age_calculator.dart';
+import 'package:baby_journal/models/user.dart';
 import 'package:flutter/foundation.dart';
 
 class Child {
-  final String id;
+  final int id;
   final String name;
   final DateTime birthday;
-  final List<String> family;
+  final List<User> family;
   Child({
     required this.id,
     required this.name,
@@ -19,18 +20,19 @@ class Child {
     result.addAll({'id': id});
     result.addAll({'name': name});
     result.addAll({'birthday': birthday.millisecondsSinceEpoch});
-    result.addAll({'family': family});
+    result.addAll({'parents': family});
 
     return result;
   }
 
-  factory Child.fromMap(Map<String, dynamic> map, String id) {
+  factory Child.fromMap(Map<String, dynamic> map) {
     return Child(
-      id: id,
+      id: map['id'].toInt(),
       name: map['name'] ?? '',
       birthday: DateTime.parse(map['birthday']),
-      family:
-          map['family'] == null ? <String>[] : List<String>.from(map['family']),
+      family: map['parents'] == null
+          ? <User>[]
+          : (map['parents'] as List).map((e) => User.fromMap(e)).toList(),
     );
   }
 
