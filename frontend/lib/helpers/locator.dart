@@ -29,7 +29,8 @@ Future<void> registerInstances() async {
   await storage.init();
   locator.registerSingleton(storage);
   final dio = Dio(BaseOptions(
-    baseUrl: 'https://127.0.0.1:7034/api/',
+    //  baseUrl: 'https://127.0.0.1:7034/api/',
+    baseUrl: 'https://10.0.2.2:7034/api/',
     validateStatus: (s) => true,
   ));
   dio.interceptors.add(PrettyDioLogger());

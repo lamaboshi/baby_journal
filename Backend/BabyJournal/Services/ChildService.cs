@@ -50,7 +50,6 @@ public class ChildService : IChildService
         };
         _context.Children.Add(child);
         await _context.SaveChangesAsync();
-        child.Parents = new List<UserModel>();
         return child;
     }
 

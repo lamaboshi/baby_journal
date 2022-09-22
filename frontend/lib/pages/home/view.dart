@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:baby_journal/pages/home/controller.dart';
+import 'package:baby_journal/pages/home/memory/widget.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:qlevar_router/qlevar_router.dart';
@@ -12,7 +16,23 @@ class HomeView extends StatelessWidget {
     final controller = HomeController.instance;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Baby journal'),
+        title: Scope(
+          builder: (_) => controller.child.value == null
+              ? const Text('Select a child')
+              : Row(
+                  children: [
+                    Text(
+                      controller.child.value!.name,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const Spacer(),
+                    Text(
+                      controller.child.value!.age(),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+        ),
         actions: [
           IconButton(
             onPressed: () => QR.to('/home/settings'),
@@ -24,18 +44,10 @@ class HomeView extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Scope(
           builder: (_) => controller.child.value == null
-              ? const Text('Select a child')
+              ? const SizedBox.shrink()
               : const _Body(),
         ),
       ),
-      floatingActionButton: controller.child.value == null
-          ? null
-          : FloatingActionButton(
-              onPressed: () {
-                QR.to('/home/memories/0');
-              },
-              child: const Icon(Icons.add),
-            ),
     );
   }
 }
@@ -46,22 +58,68 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = HomeController.instance;
-    return Column(
+    final random = Random();
+    return ListView(
       children: [
-        Row(
-          children: [
-            Text(
-              controller.child.value!.name,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const Spacer(),
-            Text(
-              controller.child.value!.age(),
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ],
-        ),
         Lottie.asset('assets/baby-loading.json'),
+        ElevatedButton(
+          onPressed: () {
+            if (controller.child.value == null) return;
+            QR.to('/home/memories/0');
+          },
+          child: const Text('Add new memory'),
+        ),
+        ElevatedButton(
+          onPressed: () => QR.to('/home/memories'),
+          child: Container(
+            width: double.infinity,
+            alignment: Alignment.center,
+            child: const Text('Show all memories'),
+          ),
+        ),
+        const SizedBox(height: 32),
+        Text('New', style: Theme.of(context).textTheme.titleLarge),
+        FutureBuilder(
+          future: controller.getLast(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const CircularProgressIndicator();
+            }
+            return CarouselSlider.builder(
+              itemCount: snapshot.requireData.length - 1,
+              options: CarouselOptions(
+                autoPlay: true,
+                enlargeCenterPage: true,
+                autoPlayAnimationDuration:
+                    Duration(seconds: random.nextInt(3) + 1),
+              ),
+              itemBuilder: (c, i, p) => MemoryWidget(
+                memory: snapshot.requireData[i],
+              ),
+            );
+          },
+        ),
+        Text('Random', style: Theme.of(context).textTheme.titleLarge),
+        FutureBuilder(
+          future: controller.getRandom(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const CircularProgressIndicator();
+            }
+            return CarouselSlider.builder(
+              itemCount: snapshot.requireData.length - 1,
+              options: CarouselOptions(
+                autoPlay: true,
+                enlargeCenterPage: true,
+                autoPlayAnimationDuration:
+                    Duration(seconds: random.nextInt(3) + 1),
+              ),
+              itemBuilder: (c, i, p) => MemoryWidget(
+                memory: snapshot.requireData[i],
+              ),
+            );
+          },
+        ),
       ],
     );
   }

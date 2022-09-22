@@ -41,13 +41,12 @@ public class MemoryService : IMemoryService
 
     public async Task AddMemory(AddMemoryRequest request)
     {
-        var child = await _context.Children.FindAsync(request.ChildId);
         var memory = new MemoryModel
         {
             At = request.At,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
-            Child = child!,
+            ChildId = request.ChildId,
             UserId = _httpContext.UserId(),
             Image = request.Image,
             Length = request.length,

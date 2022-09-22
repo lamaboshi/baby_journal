@@ -19,6 +19,13 @@ class MemoryDetailsView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add memory'),
+        actions: [
+          if (MemoryDetailsController.instance.id != 0)
+            IconButton(
+              onPressed: MemoryDetailsController.instance.delete,
+              icon: const Icon(Icons.delete),
+            ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

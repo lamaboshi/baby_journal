@@ -11,25 +11,36 @@ import 'package:qlevar_router/qlevar_router.dart';
 import 'package:reactable/reactable.dart';
 
 import '../../../../models/child.dart';
-import 'memory_saved_widget.dart';
 
 class MemoryDetailsController extends BaseController {
-  static MemoryDetailsController get instance =>
-      locator<MemoryDetailsController>();
   late final Child child;
-
-  final image = Reactable<XFile?>(null);
   final date = Reactable(DateTime.now());
-  final length = Reactable(0.0);
-  final weight = Reactable(0.0);
-  final title = Reactable('');
-  final text = Reactable('');
+  final id = QR.params['id']?.asInt ?? 0;
+  final image = Reactable<XFile?>(null);
   final isWorking = Reactable(false);
+  final length = Reactable(0.0);
+  String? networkImage;
+  final text = Reactable('');
+  final title = Reactable('');
+  final weight = Reactable(0.0);
+
   final _service = locator<MemoriesService>();
+
   @override
   Future<void> onInit() async {
     child = HomeController.instance.child.value!;
+    if (id == 0) return;
+    final value = await _service.get(id);
+    networkImage = value.image;
+    date(value.at);
+    length(value.length);
+    weight(value.weight);
+    title(value.title);
+    text(value.text);
   }
+
+  static MemoryDetailsController get instance =>
+      locator<MemoryDetailsController>();
 
   Future<void> pickImage(ImageSource source) async {
     final picker = ImagePicker();
@@ -53,15 +64,15 @@ class MemoryDetailsController extends BaseController {
   Future save() async {
     if (isWorking.value) return;
 
-    if (image.read == null) {
+    if (networkImage == null && image.read == null) {
       Overlayment.showMessage('Image must be added');
       return;
     }
     isWorking.value = true;
     try {
-      final imageUrl = await _uploadImage();
+      final imageUrl = networkImage ?? await _uploadImage();
       final memory = Memory(
-        id: 0,
+        id: id,
         at: date.value,
         createdAt: DateTime.now().toUtc(),
         image: imageUrl,
@@ -71,15 +82,13 @@ class MemoryDetailsController extends BaseController {
         title: title.read,
         weight: weight.read,
       );
-      await _service.add(memory);
-      await Overlayment.show(OverDialog(
-        child: const MemorySavedWidget(),
-        duration: const Duration(seconds: 3),
-      ));
-
+      if (id == 0) {
+        await _service.add(memory);
+      } else {
+        await _service.edit(memory);
+      }
       await QR.back();
     } catch (e, s) {
-      log(e.toString());
       log(s.toString());
       Overlayment.showMessage('Error saving data');
       isWorking.value = false;
@@ -88,5 +97,10 @@ class MemoryDetailsController extends BaseController {
 
   Future<String> _uploadImage() async {
     return _service.addImage(child.id, image.value!);
+  }
+
+  Future delete() async {
+    await _service.delete(id);
+    QR.back();
   }
 }

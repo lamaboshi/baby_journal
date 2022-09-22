@@ -5,7 +5,7 @@ class Memory {
     required this.at,
     required this.createdAt,
     required this.image,
-    required this.childId,
+    this.childId,
     required this.id,
     this.length,
     this.weight,
@@ -17,10 +17,10 @@ class Memory {
 
   factory Memory.fromMap(Map<String, dynamic> map) {
     return Memory(
-      at: DateTime.fromMillisecondsSinceEpoch(map['at']),
-      createdAt: DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
+      at: DateTime.parse(map['at']).toLocal(),
+      createdAt: DateTime.parse(map['createdAt']).toLocal(),
       image: map['image'] ?? '',
-      childId: map['childId'].toInt(),
+      childId: map['childId']?.toInt(),
       id: map['id'].toInt(),
       length: map['length']?.toDouble(),
       weight: map['wight']?.toDouble(),
@@ -32,7 +32,7 @@ class Memory {
   final DateTime at;
   final DateTime createdAt;
   final String image;
-  final int childId;
+  final int? childId;
   final int id;
   final double? length;
   final String? text;
@@ -44,7 +44,9 @@ class Memory {
 
     result.addAll({'at': at.toUtc().toIso8601String()});
     result.addAll({'image': image});
-    result.addAll({'childId': childId});
+    if (childId != null) {
+      result.addAll({'childId': childId});
+    }
     if (length != null) {
       result.addAll({'length': length});
     }
@@ -62,4 +64,29 @@ class Memory {
   }
 
   String toJson() => json.encode(toMap());
+}
+
+class PagedMemories {
+  final int offset;
+  final int limit;
+  final int count;
+  final List<Memory> records;
+  PagedMemories({
+    required this.offset,
+    required this.limit,
+    required this.count,
+    required this.records,
+  });
+
+  factory PagedMemories.fromMap(Map<String, dynamic> map) {
+    return PagedMemories(
+      offset: map['offset']?.toInt() ?? 0,
+      limit: map['limit']?.toInt() ?? 0,
+      count: map['count']?.toInt() ?? 0,
+      records: List<Memory>.from(map['records']?.map((x) => Memory.fromMap(x))),
+    );
+  }
+
+  factory PagedMemories.fromJson(String source) =>
+      PagedMemories.fromMap(json.decode(source));
 }

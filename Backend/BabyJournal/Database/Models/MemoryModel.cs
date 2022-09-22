@@ -6,6 +6,7 @@ public class MemoryModel
 {
     public int Id { get; set; }
     public int UserId { get; set; }
+    public int ChildId { get; set; }
     public double Length { get; set; }
     public double Weight { get; set; }
     public String Image { get; set; }

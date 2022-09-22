@@ -11,6 +11,7 @@ class MemoriesService extends BaseController {
   final _auth = locator<AuthService>();
 
   Future<void> add(Memory memory) async {
+    final s = memory.toJson();
     final result = await _dio.post(
       '/memory',
       options: _auth.auth,
@@ -34,9 +35,9 @@ class MemoriesService extends BaseController {
     }
   }
 
-  Future<void> delete(Memory memory) async {
+  Future<void> delete(int id) async {
     final result = await _dio.put(
-      '/memory/${memory.id}',
+      '/memory/$id',
       options: _auth.auth,
     );
 
@@ -46,7 +47,7 @@ class MemoriesService extends BaseController {
   }
 
   Future<Memory> get(int id) async {
-    final result = await _dio.put(
+    final result = await _dio.get(
       '/memory/$id',
       options: _auth.auth,
     );
@@ -72,6 +73,26 @@ class MemoriesService extends BaseController {
     return response.data['path'];
   }
 
-  // Future<List<Memory>> getRandom(Memory memory) async {}
-  // Future<List<Memory>> getAll(int childId, int skip, int length) async {}
+  Future<List<Memory>> getRandom(int childId) async {
+    final response = await _dio.get(
+      "/child/$childId/memory/random",
+      options: _auth.auth,
+    );
+    if (response.statusCode != 200) {
+      return [];
+    }
+    return List<Memory>.from(response.data.map((x) => Memory.fromMap(x)));
+  }
+
+  Future<PagedMemories?> getAll(int childId, int offset, int limit) async {
+    final response = await _dio.get(
+      "/child/$childId/memory",
+      options: _auth.auth,
+      queryParameters: {'offset': offset, 'limit': limit},
+    );
+    if (response.statusCode != 200) {
+      return null;
+    }
+    return PagedMemories.fromMap(response.data);
+  }
 }

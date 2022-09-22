@@ -13,11 +13,13 @@ class _ImageSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
       ),
-      child: Scope(builder: (_) {
-        return controller.image.value == null
-            ? const _PickImage()
-            : Image.file(File(controller.image.value!.path));
-      }),
+      child: controller.networkImage != null
+          ? Image.network(controller.networkImage!)
+          : Scope(builder: (_) {
+              return controller.image.value == null
+                  ? const _PickImage()
+                  : Image.file(File(controller.image.value!.path));
+            }),
     );
   }
 }
