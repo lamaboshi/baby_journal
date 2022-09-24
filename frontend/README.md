@@ -1,4 +1,4 @@
-# frontend
+# baby_journal
 
 A new Flutter project.
 

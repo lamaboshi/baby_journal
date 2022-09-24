@@ -3,6 +3,7 @@ import 'package:baby_journal/models/child.dart';
 import 'package:baby_journal/models/memory.dart';
 import 'package:baby_journal/pages/home/memory/service.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:reactable/reactable.dart';
 
 import '../controller.dart';
 
@@ -11,6 +12,7 @@ class MemoriesController extends BaseController {
   late final Child child;
   final _service = locator<MemoriesService>();
   final _pageSize = 25;
+  final count = Reactable(0);
 
   @override
   Future<void> onInit() {
@@ -28,6 +30,9 @@ class MemoriesController extends BaseController {
       );
       pageKey++;
       final isLastPage = newItems!.count < pageKey * _pageSize;
+      if (count.value != newItems.count) {
+        count(newItems.count);
+      }
       if (isLastPage) {
         pageController.appendLastPage(newItems.records);
       } else {

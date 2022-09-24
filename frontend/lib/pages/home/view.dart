@@ -81,7 +81,7 @@ class _BodyState extends State<_Body> {
       },
       child: ListView(
         children: [
-          Lottie.asset('assets/baby-loading.json'),
+          Lottie.asset('assets/baby-loading.json', height: 250),
           ElevatedButton(
             onPressed: () {
               if (controller.child.value == null) return;
@@ -103,7 +103,7 @@ class _BodyState extends State<_Body> {
             future: controller.getLast(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.requireData.isEmpty) {
                 return const Text('No memories yet');
@@ -127,7 +127,7 @@ class _BodyState extends State<_Body> {
             future: controller.getRandom(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
+                return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.requireData.isEmpty) {
                 return const Text('No memories yet');

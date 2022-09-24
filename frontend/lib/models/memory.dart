@@ -42,6 +42,7 @@ class Memory {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
+    result.addAll({'id': id});
     result.addAll({'at': at.toUtc().toIso8601String()});
     result.addAll({'image': image});
     if (childId != null) {
