@@ -15,9 +15,9 @@ class User {
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
 
-    result.addAll({'name': name});
-    result.addAll({'email': email});
-    result.addAll({'password': password});
+    result.addAll({'name': name.trim()});
+    result.addAll({'email': email.trim()});
+    result.addAll({'password': password.trim()});
 
     return result;
   }

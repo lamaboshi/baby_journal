@@ -78,8 +78,8 @@ class SettingsService extends BaseController {
 
   Future<Child?> addParent(int id, String email) async {
     final result = await _dio.post('/child/parent', options: _auth.auth, data: {
-      'child_id': id,
-      'Parent_email': email,
+      'childId': id,
+      'ParentEmail': email,
     });
 
     if (result.statusCode != 200) {
