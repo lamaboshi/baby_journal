@@ -1,4 +1,5 @@
 import 'package:baby_journal/pages/home/controller.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qlevar_router/qlevar_router.dart';
@@ -25,17 +26,10 @@ class MemoryWidget extends StatelessWidget {
         QR.to('/home/memories/${memory.id}');
       },
       child: Container(
-        width: double.infinity,
-        height: height,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: Image.network(
-              memory.image,
-              loadingBuilder: (context, child, loadingProgress) {
-                return const CircularProgressIndicator();
-              },
-            ).image,
-            fit: BoxFit.fill,
+            image: CachedNetworkImageProvider(memory.image),
+            fit: BoxFit.cover,
           ),
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           boxShadow: const [
@@ -63,20 +57,21 @@ class MemoryWidget extends StatelessWidget {
               end: Alignment.bottomCenter,
             ),
           ),
-          child: Row(
-            children: [
-              const SizedBox(width: 8),
-              Text(memory.title!, style: text.titleLarge),
-              const Spacer(),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(_formatter.format(memory.at)),
-                  Text(child.age(today: memory.at)),
-                ],
-              ),
-              const SizedBox(width: 8),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(memory.title!, style: text.titleLarge),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(_formatter.format(memory.at)),
+                    Text(child.age(today: memory.at)),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

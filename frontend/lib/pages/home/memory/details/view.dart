@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -16,9 +17,10 @@ class MemoryDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = MemoryDetailsController.instance;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add memory'),
+        title: Text(controller.id != 0 ? 'Edit memory' : 'Add memory'),
         actions: [
           if (MemoryDetailsController.instance.id != 0)
             IconButton(
@@ -48,6 +50,7 @@ class _ActionsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = MemoryDetailsController.instance;
     return Row(
       children: [
         const SizedBox(width: 8),
@@ -61,12 +64,11 @@ class _ActionsSection extends StatelessWidget {
         Expanded(
           flex: 3,
           child: ElevatedButton(
-            onPressed: MemoryDetailsController.instance.save,
+            onPressed: controller.save,
             child: Scope(
-              builder: (context) =>
-                  MemoryDetailsController.instance.isWorking.value
-                      ? const CircularProgressIndicator()
-                      : const Text('Add'),
+              builder: (context) => controller.isWorking.value
+                  ? const CircularProgressIndicator()
+                  : const Text('Save'),
             ),
           ),
         ),

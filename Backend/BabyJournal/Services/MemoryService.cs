@@ -76,7 +76,7 @@ public class MemoryService : IMemoryService
         var query = _context.Memories.Where(m => m.Child.Id == childId);
         paged.Count = await query.CountAsync();
         paged.Records = await query
-                            .OrderBy(m => m.At)
+                            .OrderByDescending(m => m.At)
                             .Skip(paged.Offset)
                             .Take(paged.Limit)
                             .ToListAsync();

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.WebHost.UseUrls("https://localhost:6020", "http://localhost:6021");
 // Add services to the container.
 
 builder.Services
@@ -53,8 +53,7 @@ builder
         };
     });
 
-builder.Services.AddSignalR();
-
+builder.Services.AddHealthChecks();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
@@ -63,19 +62,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var app = builder.Build();
 InitializeDatabase();
 
-app.UseCors(x => x
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
-
-app.UseRouting();
-app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseHealthChecks("/health");
 app.Run();
 
 

@@ -39,6 +39,8 @@ public class AuthController : ControllerBase
             Email = user.Email,
             Name = user.Name,
             Password = user.Password,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
         });
         await _context.SaveChangesAsync();
 

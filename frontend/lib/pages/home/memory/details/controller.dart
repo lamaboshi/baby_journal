@@ -51,7 +51,7 @@ class MemoryDetailsController extends BaseController {
     showDatePicker(
       context: Overlayment.navigationKey!.currentContext!,
       initialDate: date.read,
-      firstDate: child.birthday,
+      firstDate: child.birthday.subtract(const Duration(days: 30)),
       lastDate: DateTime.now(),
     ).then((value) {
       if (value == null) {

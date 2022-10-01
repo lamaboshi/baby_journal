@@ -6,6 +6,7 @@ import 'package:baby_journal/pages/home/memory/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:qlevar_router/qlevar_router.dart';
+import 'package:reactable/reactable.dart';
 
 class MemoriesView extends StatelessWidget {
   const MemoriesView({Key? key}) : super(key: key);
@@ -13,9 +14,12 @@ class MemoriesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = locator<MemoriesController>();
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Memories'),
+        title: Scope(
+          builder: (_) => Text('Memories ${controller.count.value}'),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -28,10 +32,17 @@ class MemoriesView extends StatelessWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () async => controller.pageController.refresh(),
-        child: PagedListView<int, Memory>(
-          pagingController: controller.pageController,
-          builderDelegate: PagedChildBuilderDelegate<Memory>(
-            itemBuilder: (context, item, index) => MemoryWidget(memory: item),
+        child: SizedBox(
+          height: size.height,
+          child: PagedListView<int, Memory>(
+            pagingController: controller.pageController,
+            scrollDirection: Axis.horizontal,
+            builderDelegate: PagedChildBuilderDelegate<Memory>(
+              itemBuilder: (context, item, index) => SizedBox(
+                width: size.width,
+                child: MemoryWidget(memory: item),
+              ),
+            ),
           ),
         ),
       ),
