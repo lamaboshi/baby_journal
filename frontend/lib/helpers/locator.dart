@@ -29,7 +29,8 @@ Future<void> registerInstances() async {
   await storage.init();
   locator.registerSingleton(storage);
   final dio = Dio(BaseOptions(
-    baseUrl: 'https://baby.qlevar.com/api/',
+    //  baseUrl: 'https://baby.qlevar.com/api/',
+    baseUrl: 'https://10.0.2.2:6020/api/',
     validateStatus: (s) => true,
   ));
   dio.interceptors.add(PrettyDioLogger());

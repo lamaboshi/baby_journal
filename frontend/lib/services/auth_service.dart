@@ -76,7 +76,7 @@ class AuthService {
 
   /// remove the login data from the local storage the set the user as logged out.
   void logout() {
-    locator<StorageService>().remove(StorageKeys.userData);
+    locator<StorageService>().clear();
     user = null;
   }
 }

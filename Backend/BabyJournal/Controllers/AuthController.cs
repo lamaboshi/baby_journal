@@ -58,11 +58,10 @@ public class AuthController : ControllerBase
         if (model == null) return BadRequest("Unknown user");
         model.LastLogin = DateTime.UtcNow;
         await _context.SaveChangesAsync();
-
         return Ok(new LoginModel
         {
-            Name = user.Name,
-            Email = user.Email,
+            Name = model.Name,
+            Email = model.Email,
             Token = CreateToken(model),
         });
     }

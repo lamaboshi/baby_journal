@@ -2,6 +2,7 @@ import 'package:baby_journal/helpers/locator.dart';
 import 'package:baby_journal/models/child.dart';
 import 'package:baby_journal/pages/home/controller.dart';
 import 'package:baby_journal/pages/home/settings/controller.dart';
+import 'package:baby_journal/pages/home/settings/view.add_child.dart';
 import 'package:baby_journal/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:qlevar_router/qlevar_router.dart';
@@ -63,19 +64,38 @@ class _ChildrenWidget extends StatelessWidget {
                 ),
                 const Spacer(),
                 IconButton(
-                  onPressed: controller.addChild,
+                  onPressed: () =>
+                      controller.addingChild(!controller.addingChild.value),
                   icon: const Icon(Icons.add),
                 )
               ],
             ),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 200),
+              child: Scope(
+                builder: (context) {
+                  if (!controller.addingChild.value) {
+                    return const SizedBox.shrink();
+                  }
+                  return const AddChildInfo();
+                },
+              ),
+            ),
             Scope(
-              builder: (_) => ListView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: controller.children.length,
-                itemBuilder: (context, index) => _ChildItemWidget(
-                  child: controller.children[index],
-                ),
+              builder: (_) => Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: controller.children.length,
+                    itemBuilder: (context, index) => _ChildItemWidget(
+                      child: controller.children[index],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const _ChildInfoWidget(),
+                ],
               ),
             ),
           ],
@@ -133,7 +153,6 @@ class _ChildSectionWidget extends StatelessWidget {
         child: Column(
           children: const [
             _FamilyWidget(),
-            _ChildInfoWidget(),
           ],
         ),
       ),
@@ -171,23 +190,37 @@ class _FamilyWidget extends StatelessWidget {
               ],
             ),
             Scope(
-              builder: (_) => ListView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: home.child.value!.family.length,
-                itemBuilder: (context, index) => Row(
-                  children: [
-                    const SizedBox(width: 8),
-                    Text(home.child.value!.family[index].name),
-                    const Spacer(),
-                    IconButton(
-                      onPressed: () => SettingsController.instance
-                          .removeParent(home.child.value!.family[index]),
-                      icon: const Icon(Icons.delete),
-                    )
-                  ],
-                ),
-              ),
+              builder: (_) {
+                final currentUser = locator<AuthService>().user!.name;
+                return ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  itemCount: home.child.value!.family.length,
+                  itemBuilder: (context, index) => Container(
+                    decoration: BoxDecoration(
+                      color: home.child.value!.family[index].name == currentUser
+                          ? Theme.of(context)
+                              .colorScheme
+                              .primary
+                              .withOpacity(0.2)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 8),
+                        Text(home.child.value!.family[index].name),
+                        const Spacer(),
+                        IconButton(
+                          onPressed: () => SettingsController.instance
+                              .removeParent(home.child.value!.family[index]),
+                          icon: const Icon(Icons.delete),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         );

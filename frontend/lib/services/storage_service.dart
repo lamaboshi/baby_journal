@@ -20,6 +20,8 @@ class StorageService {
 
   // remove value from the local storage
   void remove(StorageKeys key) => _instance!.remove(key.name);
+
+  void clear() => _instance!.clear();
 }
 
 /// The keys to use with the local storage

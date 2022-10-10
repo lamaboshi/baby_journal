@@ -13,33 +13,19 @@ class SettingsController extends BaseController {
 
   final children = ReactableList<Child>([]);
   final _service = locator<SettingsService>();
+  final addingChild = false.asReactable;
+
   @override
   Future<void> onInit() async {
     updateChildren();
   }
 
-  Future addChild() async {
-    var name = '';
-    var birthday = '';
-    await OverPanel(
-      child: InputsPanel(
-        label1: 'Name',
-        param1: (v) => name = v,
-        label2: 'Birthday',
-        param2: (v) => birthday = v,
-      ),
-    ).show();
-
-    if (name.isEmpty || birthday.isEmpty) return;
-    final date = DateTime.tryParse('$birthday 00:00:00');
-    if (date == null) {
-      Overlayment.showMessage('Birthday not valid');
-      return;
-    }
-    final child = await _service.add(name, date);
+  Future addChild(String name, DateTime birthday) async {
+    final child = await _service.add(name, birthday);
     if (child != null) {
       children.add(child);
     }
+    addingChild.value = !addingChild.value;
   }
 
   Future delete(Child child) async {

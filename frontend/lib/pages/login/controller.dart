@@ -22,9 +22,9 @@ class LoginController extends BaseController {
       return;
     }
     final user = User(
-      name: userName,
-      email: email,
-      password: password,
+      name: userName.trim(),
+      email: email.trim(),
+      password: password.trim(),
       token: 'token',
     );
     final error = isSignUp.value

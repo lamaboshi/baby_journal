@@ -49,7 +49,7 @@ class SettingsService extends BaseController {
 
   Future<Child?> add(String name, DateTime birthday) async {
     final result = await _dio.post('/child', options: _auth.auth, data: {
-      'name': name,
+      'name': name.trim(),
       'birthday': birthday.toUtc().toIso8601String(),
     });
 
@@ -64,7 +64,7 @@ class SettingsService extends BaseController {
   Future<Child?> edit(int id, String name, DateTime birthday) async {
     final result = await _dio.put('/child', options: _auth.auth, data: {
       'id': id,
-      'name': name,
+      'name': name.trim(),
       'birthday': birthday.toUtc().toIso8601String(),
     });
 
@@ -79,7 +79,7 @@ class SettingsService extends BaseController {
   Future<Child?> addParent(int id, String email) async {
     final result = await _dio.post('/child/parent', options: _auth.auth, data: {
       'childId': id,
-      'ParentEmail': email,
+      'ParentEmail': email.trim(),
     });
 
     if (result.statusCode != 200) {
@@ -94,7 +94,7 @@ class SettingsService extends BaseController {
     final result =
         await _dio.delete('/child/parent', options: _auth.auth, data: {
       'childId': id,
-      'ParentEmail': email,
+      'ParentEmail': email.trim(),
     });
 
     if (result.statusCode != 200) {
