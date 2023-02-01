@@ -45,12 +45,15 @@ class LoginView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Scope(
-                    builder: (_) => Checkbox(
-                        value: controller.isSignUp.value,
-                        onChanged: (v) =>
-                            controller.isSignUp.value = v ?? false),
+                    builder: (_) => Switch(
+                      value: controller.isSignUp.value,
+                      onChanged: (v) => controller.isSignUp.value = v,
+                    ),
                   ),
-                  const Text('New user')
+                  const Text(
+                    'New user',
+                    style: TextStyle(color: Colors.brown),
+                  )
                 ],
               ),
               const SizedBox(height: 8),

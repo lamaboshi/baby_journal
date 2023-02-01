@@ -2,11 +2,12 @@ import 'package:baby_journal/helpers/locator.dart';
 import 'package:baby_journal/models/child.dart';
 import 'package:baby_journal/pages/home/controller.dart';
 import 'package:baby_journal/pages/home/settings/controller.dart';
-import 'package:baby_journal/pages/home/settings/view.add_child.dart';
 import 'package:baby_journal/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:qlevar_router/qlevar_router.dart';
 import 'package:reactable/reactable.dart';
+
+import 'view.add_child.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -25,6 +26,7 @@ class SettingsView extends StatelessWidget {
             icon: const Icon(Icons.logout),
           ),
         ],
+        elevation: 8,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -32,7 +34,8 @@ class SettingsView extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
-              _ChildrenWidget(),
+              _SelectChildWidget(),
+              _AddingNewChildWidget(),
               _ChildSectionWidget(),
             ],
           ),
@@ -42,120 +45,107 @@ class SettingsView extends StatelessWidget {
   }
 }
 
-class _ChildrenWidget extends StatelessWidget {
-  const _ChildrenWidget({
+class _AddingNewChildWidget extends StatelessWidget {
+  const _AddingNewChildWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 200),
+      child: Scope(
+        builder: (context) {
+          if (!SettingsController.instance.addingChild.value) {
+            return const SizedBox.shrink();
+          }
+          return const AddChildInfo();
+        },
+      ),
+    );
+  }
+}
+
+class _SelectChildWidget extends StatelessWidget {
+  const _SelectChildWidget({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final controller = SettingsController.instance;
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const SizedBox(width: 8),
-                Text(
-                  'Children',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const Spacer(),
-                IconButton(
-                  onPressed: () =>
-                      controller.addingChild(!controller.addingChild.value),
-                  icon: const Icon(Icons.add),
-                )
-              ],
-            ),
-            AnimatedSize(
-              duration: const Duration(milliseconds: 200),
-              child: Scope(
-                builder: (context) {
-                  if (!controller.addingChild.value) {
-                    return const SizedBox.shrink();
-                  }
-                  return const AddChildInfo();
-                },
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: Row(
+        children: [
+          Text(
+            'Selected Child',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Scope(
+              builder: (_) => DropdownButton<Child>(
+                value: HomeController.instance.child.value,
+                items: controller.children
+                    .map(
+                      (child) => DropdownMenuItem<Child>(
+                        value: child,
+                        child: Row(
+                          children: [
+                            Text(child.name),
+                            const Spacer(),
+                            IconButton(
+                              onPressed: () => controller.delete(child),
+                              icon: const Icon(Icons.delete),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
+                isExpanded: true,
+                selectedItemBuilder: (_) => controller.children
+                    .map(
+                      (child) => Container(
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Text(child.name),
+                      ),
+                    )
+                    .toList(),
+                onChanged: (child) => controller.setChild(child!),
               ),
             ),
-            Scope(
-              builder: (_) => Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: controller.children.length,
-                    itemBuilder: (context, index) => _ChildItemWidget(
-                      child: controller.children[index],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const _ChildInfoWidget(),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 8),
+          IconButton(
+            onPressed: () =>
+                controller.addingChild(!controller.addingChild.value),
+            icon: const Icon(Icons.add),
+          )
+        ],
       ),
     );
   }
 }
 
-class _ChildItemWidget extends StatelessWidget {
-  const _ChildItemWidget({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
-
-  final Child child;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => SettingsController.instance.setChild(child),
-      child: Scope(
-        builder: (_) => Container(
-          decoration: BoxDecoration(
-            color: HomeController.instance.child.value?.id == child.id
-                ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
-                : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            children: [
-              const SizedBox(width: 8),
-              Text(child.name),
-              const Spacer(),
-              IconButton(
-                onPressed: () => SettingsController.instance.delete(child),
-                icon: const Icon(Icons.delete),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ChildSectionWidget extends StatelessWidget {
+class _ChildSectionWidget extends ScopedView {
   const _ChildSectionWidget();
 
   @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: const [
-            _FamilyWidget(),
-          ],
-        ),
-      ),
+  Widget builder(BuildContext context) {
+    final home = HomeController.instance;
+    if (home.child.value == null) {
+      return const SizedBox.shrink();
+    }
+    return const ExpansionTile(
+      tilePadding: EdgeInsets.symmetric(horizontal: 8),
+      title: Text('Child Info'),
+      children: [
+        _ChildEditInfoWidget(),
+        _FamilyWidget(),
+      ],
     );
   }
 }
@@ -180,7 +170,7 @@ class _FamilyWidget extends StatelessWidget {
               children: [
                 Text(
                   'Family',
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
                 const Spacer(),
                 IconButton(
@@ -229,21 +219,6 @@ class _FamilyWidget extends StatelessWidget {
   }
 }
 
-class _ChildInfoWidget extends StatelessWidget {
-  const _ChildInfoWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scope(builder: (_) {
-      final home = HomeController.instance;
-      if (home.child.value == null) {
-        return const SizedBox.shrink();
-      }
-      return const _ChildEditInfoWidget();
-    });
-  }
-}
-
 class _ChildEditInfoWidget extends StatefulWidget {
   const _ChildEditInfoWidget({Key? key}) : super(key: key);
 
@@ -283,13 +258,6 @@ class _ChildEditInfoWidgetState extends State<_ChildEditInfoWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            'Child info',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
-        ),
         TextField(controller: nameController),
         TextField(controller: birthdayController),
         Row(

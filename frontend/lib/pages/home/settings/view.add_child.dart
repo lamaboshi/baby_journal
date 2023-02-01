@@ -83,7 +83,6 @@ class _AgeSection extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        const SizedBox(width: 8),
         Text(formatter.format(date)),
         const SizedBox(width: 8),
         Text(age),

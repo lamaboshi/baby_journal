@@ -17,7 +17,7 @@ class SettingsController extends BaseController {
 
   @override
   Future<void> onInit() async {
-    updateChildren();
+    await updateChildren();
   }
 
   Future addChild(String name, DateTime birthday) async {
@@ -72,12 +72,11 @@ class SettingsController extends BaseController {
     locator<StorageService>().setInt(StorageKeys.selectedChild, child.id);
   }
 
-  void updateChildren() {
-    _service.getChildren().then((value) {
-      if (value != null) {
-        children.value = value;
-      }
-    });
+  Future<void> updateChildren() async {
+    final value = await _service.getChildren();
+    if (value != null) {
+      children.value = value;
+    }
   }
 
   Future update(String name, String birthday) async {

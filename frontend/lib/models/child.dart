@@ -1,6 +1,5 @@
 import 'package:age_calculator/age_calculator.dart';
 import 'package:baby_journal/models/user.dart';
-import 'package:flutter/foundation.dart';
 
 class Child {
   final int id;
@@ -43,8 +42,7 @@ class Child {
     return other is Child &&
         other.id == id &&
         other.name == name &&
-        other.birthday == birthday &&
-        listEquals(other.family, family);
+        other.birthday == birthday;
   }
 
   @override
